@@ -10,7 +10,15 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171009192152) do
+ActiveRecord::Schema.define(version: 20171009193716) do
+
+  create_table "movements", force: :cascade do |t|
+    t.string "instructions"
+    t.string "target_area"
+    t.integer "reps"
+    t.string "modification"
+    t.string "challenge"
+  end
 
   create_table "routines", force: :cascade do |t|
     t.string "name"
