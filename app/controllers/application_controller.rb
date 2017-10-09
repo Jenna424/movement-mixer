@@ -12,3 +12,5 @@ class ApplicationController < Sinatra::Base
   get '/' do # root route is GET request to localhost:9393, the homepage
     erb :index # render the index.erb view file, which is found in the views/ folder
   end
+
+end
