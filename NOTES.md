@@ -4,3 +4,9 @@ params = {
   "email" => "@email attribute value of user instance",
   "password" => "@password attribute value of user instance"  
 }
+
+When login form is submitted, params hash looks like this:
+params = {
+  "username" => "@username value of user instance",
+  "password" => "@password value of user instance"
+}
