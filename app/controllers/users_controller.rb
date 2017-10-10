@@ -42,4 +42,13 @@ class UsersController < ApplicationController
     end
   end
 
+  get '/logout' do # route is GET request to localhost:9393/logout
+    if logged_in? # if the user is logged in and navigates to localhost:9393/logout,
+      session.clear # log out the user
+      redirect to '/login' # redirect to localhost:9393/login, where login form is presented
+    else # otherwise, if the user is not logged in,
+      redirect to '/' # redirect user to localhost:9393 homepage
+    end
+  end
+
 end
