@@ -1,4 +1,7 @@
+require 'rack-flash'
+
 class UsersController < ApplicationController
+  use Rack::Flash
 
   get '/signup' do # route is GET request to localhost:9393/signup, where form is presented to create a new user
     if !logged_in? # If a user is NOT already logged in,
@@ -24,6 +27,18 @@ class UsersController < ApplicationController
       redirect to '/routines'
     else # otherwise, if the user is NOT already logged in, they should see the login form
       erb :'users/login' # render the login.erb view file, found within the users/ subfolder within the views/ folder
+    end
+  end
+
+  post '/login' do # route receives data submitted in login form
+    @user = User.find_by(username: params[:username]) # find user instance by its @username attribute value (whatever was entered in username field in login form)
+
+    if @user && @user.authenticate(params[:password]) # if a user instance exists with that @username value and if the user authenticates with that password,
+      session[:user_id] = @user.id # log in the user
+      redirect to "/routines" # redirect user to localhost:9393/routines, the index page where all routines are listed
+    else # if a valid user is NOT found,
+      flash[:message] = "You entered an invalid username and password combination. Please try logging in again."
+      erb :'users/login' # redirect to localhost:9393/login so user can try logging in again
     end
   end
 
