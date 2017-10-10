@@ -16,5 +16,11 @@
   <label for="equipment">Equipment:</label>
   <input type="text" name="equipment" id="equipment"><br></br>
 
+  <label><strong>Select Exercises for Your Workout Routine! Choose basic exercises movements from the following list:</strong></label><br></br>
+
+  <% Movement.all.each do |movement| %>
+    <input type="checkbox" name="routine[movement_ids][]" value="<%= movement.id %>"><%= movement.name %></input>
+  <% end %>
+
   <input type="submit" value="Create Routine">
 </form>
