@@ -1,4 +1,7 @@
 class User < ActiveRecord::Base
+  include Sluggable::InstanceMethods
+  extend Sluggable::ClassMethods
+  
   has_secure_password # user instance has @password attribute even though column in users table is password_digest
   # user instance must have @password attribute to be successfully saved to DB
   validates :name, :presence => true
