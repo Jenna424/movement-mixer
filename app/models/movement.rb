@@ -8,5 +8,5 @@ class Movement < ActiveRecord::Base
   validates :reps, :presence => true
   validates :modification, :presence => true
   validates :challenge, :presence => true
-  
+  # movement instance must have @name, @instructions, @target_area, @reps, @modification and @challenge attributes to be successfully saved to DB
 end
