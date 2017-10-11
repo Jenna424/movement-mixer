@@ -31,7 +31,7 @@ class UsersController < ApplicationController
   end
 
   post '/login' do # route receives data submitted in login form
-    @user = User.find_by(username: params[:username]) # find user instance by its @username attribute value (whatever was entered in username field in login form)
+    @user = User.find_by(name: params[:name]) # find user instance by its @username attribute value (whatever was entered in username field in login form)
 
     if @user && @user.authenticate(params[:password]) # if a user instance exists with that @username value and if the user authenticates with that password,
       session[:user_id] = @user.id # log in the user
