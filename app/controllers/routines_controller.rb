@@ -30,7 +30,7 @@ class RoutinesController < ApplicationController
     # Now we can also call @routine.movements and the array of existing movement instances belonging to the @routine instance is returned
     if @routine.save # a routine instance will only be saved to DB if user filled in Name, Training Type, Duration, Difficulty Level and Equipment required form fields
       if params[:movement].values.detect {|value| value == ""}
-        flash[:message] = "You must fill in Name, Instructions, Target Area, Reps, Modification and Challenge fields to create a new exercise movement for your workout routine."
+        flash[:message] = "You must fill in all six fields to create a new exercise movement for your workout routine."
         redirect to "/routines/new" # present the form to try creating a new routine again
       else # if user filled in all fields to create a new movement belonging to the new routine
         @routine.movements << Movement.create(params[:movement])
