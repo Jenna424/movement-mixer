@@ -3,7 +3,10 @@ class Movement < ActiveRecord::Base
   has_many :routines, through: :movement_routines
 
   validates :name, :presence => true
-  # a movement instance must have @name attribute value to be successfully saved to DB
+  validates :instructions, :presence => true
+  validates :target_area, :presence => true
   validates :reps, :presence => true
-  # a movement instance must have @reps attribute value to be successfully saved to DB
+  validates :modification, :presence => true
+  validates :challenge, :presence => true
+  
 end
