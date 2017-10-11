@@ -1,4 +1,7 @@
 class Movement < ActiveRecord::Base
+  include Sluggable::InstanceMethods
+  extend Sluggable::ClassMethods
+  
   has_many :movement_routines
   has_many :routines, through: :movement_routines
 
