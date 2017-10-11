@@ -51,7 +51,7 @@ class RoutinesController < ApplicationController
   get '/routines/:slug' do # route is GET request to localhost:9393/routines/slugged-version-of-@name-attribute-value-of-routine-instance-goes-here
     if logged_in? # the user can only view a routine if logged in
       @routine = Routine.find_by_slugged_name(params[:slug])
-      erb :'routines/show' # render the show.erb view file found within the routines/ subfolder in the views/ folder
+      erb :'routines/show_routine' # render the show_routine.erb view file found within the routines/ subfolder in the views/ folder
     else
       redirect to '/login'
     end
