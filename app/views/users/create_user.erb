@@ -1,5 +1,5 @@
 <h1>User Registration - Sign Up for Movement Mixer!</h1>
-<p><strong><%= "Please fill in all three form fields to register successfully." if @user && @user.errors.any? %></strong></p>
+<p><strong><%= "Please fill in all three form fields to successfully register." if @user && @user.errors.any? %></strong></p>
 
 <form action="/signup" method="POST">
   <label for="name">Name:</label>
