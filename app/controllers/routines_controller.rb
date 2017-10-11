@@ -57,4 +57,17 @@ class RoutinesController < ApplicationController
     end
   end
 
+  get '/routines/:id/edit' do # route is GET request to localhost:9393/routines/@id of whatever routine instance user wants to edit replaces :id route variable here/edit
+    @routine = Routine.find_by(id: params[:id]) # find the routine instance by its @id value, which = params[:id]
+
+    if !logged_in? # prevent someone who's not logged in from viewing edit form; redirect to login page
+      redirect to '/login'
+    elsif current_user.routines.include?(@routine) # Calling #current_user will return the user instance who's currently logged in. If the routine instance requested to edit belongs to the user instance who's currently logged in (i.e. the routine instance is included in logged-in user instance's array of routine instances),
+      erb :'routines/edit_routine' # render the edit_routine.erb view file, which is found in the routines/ subfolder within the views/ folder
+    else # otherwise, if a user who IS logged in tries to access the edit form of a routine that does NOT belong to them
+      flash[:message] = "You are not authorized to edit the requested routine."
+      redirect to '/routines' # redirect logged-in user to the routines index page
+    end
+  end
+
 end
