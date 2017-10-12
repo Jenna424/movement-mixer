@@ -6,4 +6,19 @@
 
 <form action="/routines/<%= @routine.generate_slug %>" method="POST">
   <input type="hidden" id="hidden" name="_method" value="PATCH">
+
+  <label for="name">Name:</label>
+  <input type="text" name="routine[name]" id="name" value="<%= @routine.name %>"><br></br>
+
+  <label for="training_type">Training Type:</label>
+  <input type="text" name="routine[training_type]" id="training_type" value="<%= @routine.training_type %>"><br></br>
+
+  <label for="duration">Duration:</label>
+  <input type="text" name="routine[duration]" id="duration" value="<%= @routine.duration %>"><br></br>
+
+  <label for="difficulty">Difficulty Level:</label>
+  <input type="text" name="routine[difficulty_level]" id="difficulty" value="<%= @routine.difficulty_level %>"><br></br>
+
+  <label for="equipment">Equipment:</label>
+  <input type="text" name="routine[equipment]" id="equipment" value="<%= @routine.equipment %>"><br></br>
 </form>
