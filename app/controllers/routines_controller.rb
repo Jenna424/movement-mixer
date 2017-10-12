@@ -76,6 +76,18 @@ class RoutinesController < ApplicationController
     if params[:routine].values.any? {|value| value.empty?}
       flash[:message] = "You must fill in Name, Training Type, Duration, Difficulty Level and Equipment form fields to edit your workout routine."
       redirect to "/routines/#{@routine.id}/edit"
+    else # user filled in all fields pertaining to routine attributes, but now check if user created a new, valid movement to add to their routine:
+      if params[:movement].values.all? {|value| value.empty?} # user did not create a new movement for the routine (all form fields for creating a new movement were left blank, i.e., values are empty strings)
+        flash[:message] = "Your workout routine was successfully updated!"
+        redirect to "/routines/#{@routine.generate_slug}" # show user their routine that was either left the same or edited (without a new movement added to it)
+      elsif params[:movement].values.all? {|value| value != ""} # if all form fields to create a new movement for the routine were filled in, the new movement is valid
+        @routine.movements << Movement.create(params[:movement]) # create and save to DB a movement instance with its attributes set via mass assignment and shovel it into the routine instance's array of movement instances
+        flash[:message] = "Your workout routine was successfully updated!"
+        redirect to "/routines/#{@routine.generate_slug}" # show user their routine that was edited (including a new movement successfully added to it)
+      else # if the user filled in only SOME of the required fields to create a new movement for their routine, the movement is invalid so,
+        flash[:message] = "You must fill in Name, Instructions, Target Area, Reps, Modification and Challenge form fields to create a new, valid movement to add to your routine."
+        redirect to "/routines/#{@routine.id}/edit"
+      end
     end
   end
 
