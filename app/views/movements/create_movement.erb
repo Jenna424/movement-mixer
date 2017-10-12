@@ -24,10 +24,10 @@
   <% current_user.routines.each do |routine| %>
     <input type="checkbox" name="movement[routine_ids][]" value="<%= routine.id %>" id="<%= routine.name %>"><%= routine.name %></input>
   <% end %>
-  
+
   <br></br>
 
-  <label>And/Or, create a new workout routine in which you perform this movement:<label><br></br>
+  <label>And/Or, create a new workout routine in which you perform this movement:</label><br></br>
 
 
   <input type="submit" value="Create Movement">
