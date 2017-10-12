@@ -10,3 +10,10 @@
     <li><a href="/movements/<%= movement.generate_slug %>"><%= movement.name %></a>: <%= movement.reps %> reps</li>
   <% end %>
 </ol>
+
+<p><a href="/routines/<%= @routine.id %>/edit">Edit Routine</a></p>
+
+<form action="/routines/<%= @routine.id %>/delete" method="POST">
+  <input type="hidden" id="hidden" name="_method" value="DELETE">
+  <input type="submit" value="Delete Routine">
+</form>
