@@ -70,4 +70,13 @@ class RoutinesController < ApplicationController
     end
   end
 
+  patch '/routines/:slug' do # PATCH request route receives data submitted in form to edit the user's routine
+    @routine = Routine.find_by_slugged_name(params[:slug])
+
+    if params[:routine].values.any? {|value| value.empty?}
+      flash[:message] = "You must fill in Name, Training Type, Duration, Difficulty Level and Equipment form fields to edit your workout routine."
+      redirect to "/routines/#{@routine.id}/edit"
+    end
+  end
+
 end
