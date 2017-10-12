@@ -28,6 +28,8 @@
     <input type="checkbox" name="routine[movement_ids][]" value="<%= movement.id %>" <%= 'checked' if @routine.movements.include?(movement) %>><%= movement.name %></input>
   <% end %>
 
+  <br></br>
+
   <label><strong>And/Or, Create a New Movement to Add to Your Workout Routine:</strong></label><br></br>
 
   <label for="movement_name">Name:</label>
@@ -48,4 +50,5 @@
   <label for="challenge">Challenge:</label>
   <input type="text" name="movement[challenge]" id="challenge"><br></br>
 
+  <input type="submit" value="Edit Routine">
 </form>
