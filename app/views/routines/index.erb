@@ -1,9 +1,0 @@
-<h1>Welcome, <%= current_user.name %>!</h1>
-
-<h2><em>Archive of All Workout Routines</em></h2>
-
-<ul>
-  <% @all_routines.each do |routine| %>
-    <li><a href="/routines/<%= routine.generate_slug %>"><%= routine.name %></a></li>
-  <% end %>
-</ul>
