@@ -4,3 +4,9 @@
 
 <h1><em><%= @routine.name %></em></h1>
 <h3>Workout Routine Designed by <%= @routine.user.name %>:</h3>
+
+<ol>
+  <% @routine.movements.each do |movement| %>
+    <li><a href="/movements/<%= movement.generate_slug %>"><%= movement.name %></a>: <%= movement.reps %> reps</li>
+  <% end %>
+</ol>
