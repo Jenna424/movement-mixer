@@ -93,4 +93,18 @@ class RoutinesController < ApplicationController
     end
   end
 
+  delete '/routines/:id/delete' do # route receives data when Delete Routine button (form) is clicked on the show page of routine wished to be deleted
+    if logged_in? # if the user is logged in
+      @routine = Routine.find_by(id: params[:id]) # find the routine instance by its @id attribute value, which = params[:id]
+      if current_user.routines.include?(@routine) # if the routine instance is included in the array of routine instances belonging to the currently logged-in user,
+        @routine.delete # delete the routine
+        redirect to '/routines' # browser navigates to index page of all routines created by all users
+      else # the user is logged in, but the requested routine does NOT belong to them, so user cannot delete it
+        flash[:message] = "You are not authorized to delete a routine designed by a different user."
+        redirect to '/routines'
+      end
+    end
+    redirect to '/login' # if user is not logged in, show login form to sign in
+  end
+
 end
