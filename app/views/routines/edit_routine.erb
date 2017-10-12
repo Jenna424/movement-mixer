@@ -21,4 +21,10 @@
 
   <label for="equipment">Equipment:</label>
   <input type="text" name="routine[equipment]" id="equipment" value="<%= @routine.equipment %>"><br></br>
+
+  <label><strong>Select Exercises for Your Workout! Choose basic exercises movements from the list below:</strong></label><br></br>
+
+  <% Movement.all.each do |movement| %>
+    <input type="checkbox" name="routine[movement_ids][]" value="<%= movement.id %>" <%= 'checked' if @routine.movements.include?(movement) %>><%= movement.name %></input>
+  <% end %>
 </form>
