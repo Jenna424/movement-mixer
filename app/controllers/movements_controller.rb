@@ -28,6 +28,17 @@ class MovementsController < ApplicationController
         # and we can also call routine.movements to return array of movement instances (including @movement) belonging to that routine instance
         flash[:message] = "You successfully created a new exercise movement!"
         redirect to "/movements/#{@movement.generate_slug}"
+      elsif params[:routine].values.all? {|value| value != ""} # the user filled in all fields to create a new routine for the new movement to be found in (all values are NOT empty strings)
+        @movement = Movement.create(params[:movement])
+        @movement.routine_ids = params[:movement][:routine_ids]
+        Routine.create(params[:routine]).movements << @movement
+        # create a new routine instance with its attributes set via mass assignment and save it to DB
+        # after shoveling, @movement is in the array of movement instances found in the new routine instance that we just created
+        # and when we call @movement.routines, an array of routine instances in which the movement instance is used is returned. This array includes the routine we just created.
+        flash[:message] = "You successfully created a new exercise movement used in a new workout routine!"
+        redirect to "/movements/#{@movement.generate_slug}"
       end
     end
   end
+
+end
