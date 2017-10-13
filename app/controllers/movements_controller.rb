@@ -37,6 +37,9 @@ class MovementsController < ApplicationController
         # and when we call @movement.routines, an array of routine instances in which the movement instance is used is returned. This array includes the routine we just created.
         flash[:message] = "You successfully created a new exercise movement used in a new workout routine!"
         redirect to "/movements/#{@movement.generate_slug}"
+      else # user left some of the form fields blank for creating a new routine for the new movement to be used in
+        flash[:message] = "You must fill in Name, Training Type, Duration, Difficulty Level and Equipment fields to create a new workout routine."
+        redirect to '/movements/new'
       end
     end
   end
