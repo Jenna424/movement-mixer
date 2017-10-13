@@ -16,4 +16,18 @@ class MovementsController < ApplicationController
     end
   end
 
-end
+  post '/movements' do # route receives the data submitted in form to create a new movement
+    if params[:movement].values.any? {|value| value.empty?} # if the user left any fields pertaining to movement attributes blank (value is empty string)
+      flash[:message] = "You must fill in Name, Instructions, Target Area, Reps, Modification and Challenge fields to create a new exercise movement."
+      redirect to '/movements/new' # present form to try creating new movement again
+    else # otherwise, the user filled in all required exercise movement fields.
+      if params[:routine].values.all? {|value| value.empty?} # the user did not create a new routine for that new movement to be found in. all form fields for new routine were left blank (empty strings)
+        @movement = Movement.create(params[:movement]) # create movement instance with its attributes set via mass assignment
+        @movement.routine_ids = params[:movement][:routine_ids]
+        # now we can call @movement.routines to return array of existing routine instances that the movement instance is included in
+        # and we can also call routine.movements to return array of movement instances (including @movement) belonging to that routine instance
+        flash[:message] = "You successfully created a new exercise movement!"
+        redirect to "/movements/#{@movement.generate_slug}"
+      end
+    end
+  end
