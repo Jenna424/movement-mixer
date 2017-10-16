@@ -53,4 +53,16 @@ class MovementsController < ApplicationController
     end
   end
 
+  get '/movements/:id/edit' do # route is GET request to localhost:9393/movements/@id-attribute-value-of-movement-instance-wished-to-be-edited-goes-here/edit
+    @movement = Movement.find_by(id: params[:id]) # find movement instance by its @id attribute value, which = params[:id], i.e., whatever user typed into URL to replace :id route variable
+    if !logged_in? # the user can only edit a movement instance that belongs to them if they're logged in, so if they're not logged in
+      redirect to '/login' # redirect user to the page that presents login form
+    elsif current_user.movements.include?(@movement) # the logged in user is returned by calling #current_user helper method. If @movement (the movement instance requested to be edited) is found in the logged-in user's array of movement instances belonging to it,
+      erb :'movements/edit_movement' # render the edit_movement.erb view file, which is found within the movements/ subfolder in the views/ folder
+    else # otherwise, the user is currently logged in, but the movement they are trying to edit does NOT belong to them, so they cannot edit it
+      flash[:message] = "You are not authorized to edit an exercise movement added by a different user."
+      redirect to '/movements' # redirect user to the index page displaying all exercise movements
+    end
+  end
+
 end
