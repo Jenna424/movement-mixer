@@ -69,4 +69,19 @@ class MovementsController < ApplicationController
     end
   end
 
+  delete '/movements/:slug' do # route receives data when user clicks Delete Exercise button on exercise movement show page
+    if logged_in?
+      @movement = Movement.find_by_slugged_name(params[:slug])
+      if current_user.movements.include?(@movement)
+        @movement.delete
+        redirect to '/movements'
+      else
+        flash[:message] = "You are not authorized to delete an exercise created by a different user."
+        redirect to '/movements'
+      end
+    else
+      redirect to '/login'
+    end
+  end
+
 end
