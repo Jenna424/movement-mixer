@@ -2,7 +2,7 @@ require 'rack-flash'
 
 class MovementsController < ApplicationController
   use Rack::Flash
-  
+
   get '/movements' do # index action - route is GET request to localhost:9393/movements to display all movements included in all workout routines
     if logged_in? # the user can only see the index of all exercise movements if logged in
       @all_movements = Movement.all # @all_movements is an array storing all movement instances
@@ -33,14 +33,14 @@ class MovementsController < ApplicationController
         flash[:message] = "You successfully created a new exercise movement!"
         redirect to "/movements/#{@movement.generate_slug}"
       elsif params[:routine].values.all? {|value| value != ""} # the user filled in all fields to create a new routine for the new movement to be found in (all values are NOT empty strings)
-        @movement = Movement.create(params[:movement])
-        @movement.routine_ids = params[:movement][:routine_ids]
-        Routine.create(params[:routine]).movements << @movement
+        @routine = current_user.routines.create(params[:routine]) # create routine instance that automatically belongs to user instance who's currently logged in. @routine.user returns user instance to which @routine instance belongs.
+        movement = @routine.movements.create(params[:movement]) # create movement instance immediately found in the new routine we just created for new movement to belong in.
+        movement.routine_ids = params[:movement][:routine_ids]
         # create a new routine instance with its attributes set via mass assignment and save it to DB
-        # after shoveling, @movement is in the array of movement instances found in the new routine instance that we just created
-        # and when we call @movement.routines, an array of routine instances in which the movement instance is used is returned. This array includes the routine we just created.
-        flash[:message] = "You successfully created a new exercise movement used in a new workout routine!"
-        redirect to "/movements/#{@movement.generate_slug}"
+        # movement is in the array of movement instances found in the new routine that we just created
+        # and when we call movement.routines, an array of routine instances in which the movement instance is used is returned.
+        flash[:message] = "You successfully created a new workout routine that includes a new exercise movement!"
+        redirect to "/routines/#{@routine.generate_slug}"
       else # user left some of the form fields blank for creating a new routine for the new movement to be used in
         flash[:message] = "You must fill in Name, Training Type, Duration, Difficulty Level and Equipment fields to create a new workout routine."
         redirect to '/movements/new'
