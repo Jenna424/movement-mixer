@@ -74,6 +74,7 @@ class MovementsController < ApplicationController
       @movement = Movement.find_by_slugged_name(params[:slug])
       if current_user.movements.include?(@movement)
         @movement.delete
+        flash[:message] = "Your exercise was successfully deleted."
         redirect to '/movements'
       else
         flash[:message] = "You are not authorized to delete an exercise created by a different user."
