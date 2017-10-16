@@ -7,5 +7,6 @@
 <p><a href="/movements/<%= @movement.id %>/edit">Edit Exercise</a></p>
 
 <form action="/movements/<%= @movement.generate_slug %>" method="POST">
-  <input type="hidden" id="hidden" name="_method" value="PATCH">
+  <input type="hidden" id="hidden" name="_method" value="DELETE">
+  <input type="submit" value="Delete Exercise">
 </form>
