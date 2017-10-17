@@ -51,4 +51,13 @@ class MovementsController < ApplicationController
     end
   end
 
+  get '/movements/:slug' do # show action - route is GET request to localhost:9393/slugged-version-of-@name-attribute-value-of-movement-instance-wish-to-be-shown-goes-here
+    if logged_in? # the user can only view a single exercise movement if they're logged in
+      @movement = Movement.find_by_slugged_name(params[:slug])
+      erb :'movements/show_movement' # render the show_movement.erb view file, which is found within the movements/ subfolder within the views/ folder
+    else
+      redirect to '/login'
+    end
+  end
+
 end
