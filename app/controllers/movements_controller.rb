@@ -30,7 +30,9 @@ class MovementsController < ApplicationController
         # instantiate movement instance with its attribute set via mass assignment and automatically belonging to the logged-in user instance who created it
         # now @movement has user_id foreign key column value set, and we can call #user on @movement to return user instance to which it belongs
         # also, calling current_user.movements will return array of movement instances belonging to this user, which includes @movement
-        @movement.routine_ids = params[:movement][:routine_ids]
+        @movement.routine_ids = params[:movement][:routine_ids] if params[:routine_ids]
+        # if there are no existing workout routines already created by the user, params hash won't contain "routine_ids" key pointing to array of @id attribute values
+        # tell the movement instance which of the user's existing routine instances it belongs to if there are existing routines for that user
         # now calling #routines on @movement returns array of routine instances created by that user in which the movement instance is found. And calling #movements on a routine that contains @movement will return array of movements including @movement
         flash[:message] = "Your exercise movement was successfully created!"
         redirect to "/movements/#{@movement.generate_slug}"
