@@ -12,38 +12,41 @@ class MovementsController < ApplicationController
     end
   end
 
-  get '/movements/new' do # route is GET request to localhost:9393/movements/new, which presents the form to create a new movement
-    if logged_in? # if the user is logged in, user is able to create a new exercise movement
-      erb :'movements/create_movement' # render the create_movement.erb view file, which is found in the movements/ subfolder within the views/ folder
+  get '/movements/new' do # route is GET request to localhost:9393/movements/new to present form to create new movement
+    if logged_in?
+      erb :'movements/create_movement' # render create_movement.erb view file, found within the movements/ subfolder in the views/ folder
     else
       redirect to '/login'
     end
   end
 
-  post '/movements' do # route receives the data submitted in form to create a new movement
-    if params[:movement].values.any? {|value| value.empty?} # if the user left any fields pertaining to movement attributes blank (value is empty string)
+  post '/movements' do # route receives data submitted in form to create new exercise movement
+    if params[:movement].values.any? {|value| value.empty?} # if the user forgot to fill in any required field for movement attribute
       flash[:message] = "You must fill in Name, Instructions, Target Area, Reps, Modification and Challenge fields to create a new exercise movement."
-      redirect to '/movements/new' # present form to try creating new movement again
-    else # otherwise, the user filled in all required exercise movement fields.
-      if params[:routine].values.all? {|value| value.empty?} # the user did not create a new routine for that new movement to be found in. all form fields for new routine were left blank (empty strings)
-        @movement = Movement.create(params[:movement]) # create movement instance with its attributes set via mass assignment
-        @movement.routine_ids = params[:movement][:routine_ids]
-        # now we can call @movement.routines to return array of existing routine instances that the movement instance is included in
-        # and we can also call routine.movements to return array of movement instances (including @movement) belonging to that routine instance
-        flash[:message] = "You successfully created a new exercise movement!"
+      redirect to "/movements/new"
+    else # user filled in all required fields for movement attributes
+      if params[:routine].values.all? {|value| value.empty?} # user did not create a new workout routine in which to use the new movement
+        @movement = current_user.movements.create(params[:movement])
+        # instantiate movement instance with its attribute set via mass assignment and automatically belonging to the logged-in user instance who created it
+        # now @movement has user_id foreign key column value set, and we can call #user on @movement to return user instance to which it belongs
+        # also, calling current_user.movements will return array of movement instances belonging to this user, which includes @movement
+        @movement.routine_ids = params[:movement][:routine_ids] if params[:routine_ids]
+        # if there are no existing workout routines already created by the user, params hash won't contain "routine_ids" key pointing to array of @id attribute values
+        # tell the movement instance which of the user's existing routine instances it belongs to if there are existing routines for that user
+        # now calling #routines on @movement returns array of routine instances created by that user in which the movement instance is found. And calling #movements on a routine that contains @movement will return array of movements including @movement
+        flash[:message] = "Your exercise movement was successfully created!"
         redirect to "/movements/#{@movement.generate_slug}"
-      elsif params[:routine].values.all? {|value| value != ""} # the user filled in all fields to create a new routine for the new movement to be found in (all values are NOT empty strings)
-        @routine = current_user.routines.create(params[:routine]) # create routine instance that automatically belongs to user instance who's currently logged in. @routine.user returns user instance to which @routine instance belongs.
-        movement = @routine.movements.create(params[:movement]) # create movement instance immediately found in the new routine we just created for new movement to belong in.
-        movement.routine_ids = params[:movement][:routine_ids]
-        # create a new routine instance with its attributes set via mass assignment and save it to DB
-        # movement is in the array of movement instances found in the new routine that we just created
-        # and when we call movement.routines, an array of routine instances in which the movement instance is used is returned.
-        flash[:message] = "You successfully created a new workout routine that includes a new exercise movement!"
-        redirect to "/routines/#{@routine.generate_slug}"
-      else # user left some of the form fields blank for creating a new routine for the new movement to be used in
-        flash[:message] = "You must fill in Name, Training Type, Duration, Difficulty Level and Equipment fields to create a new workout routine."
-        redirect to '/movements/new'
+      elsif params[:routine].values.all? {|value| value != ""}
+        @routine = current_user.routines.create(params[:routine]) # create and save to DB a routine instance with its attributes set via mass assignment and automatically belonging to the user instance who's currently logged in (and who created the routine)
+        @movement = @routine.movements.create(params[:movement]) # create and save to DB a movement instance with its attributes set via mass assigment and immediately included in the routine instance that we just created, which belongs to the currently logged-in user. Now we can call routine.movements and movement.routines
+        @movement.routine_ids = params[:movement][:routine_ids] # tell the movement instance which existing workout routines it's found in
+        @movement.user = current_user # tell the movement that it belongs to the current user (sets the foreign key)
+        @movement.update(params[:movement]) # update the attribute values of the movement instance (some attributes may have been edited)
+        flash[:message] = "Your exercise movement was successfully updated and is now included in a new workout routine!"
+        redirect to "/movements/#{@movement.generate_slug}"
+      else
+        flash[:message] = "You must fill in Name, Training Type, Duration, Difficulty Level and Equipment form fields to successfully create a new workout routine in which to perform your exercise movement."
+        redirect to "/movements/#{@movement.id}/edit"
       end
     end
   end
@@ -61,7 +64,7 @@ class MovementsController < ApplicationController
     @movement = Movement.find_by(id: params[:id]) # find movement instance by its @id attribute value, which = params[:id], i.e., whatever user typed into URL to replace :id route variable
     if !logged_in? # the user can only edit a movement instance that belongs to them if they're logged in, so if they're not logged in
       redirect to '/login' # redirect user to the page that presents login form
-    elsif current_user.movements.include?(@movement) # the logged in user is returned by calling #current_user helper method. If @movement (the movement instance requested to be edited) is found in the logged-in user's array of movement instances belonging to it,
+    elsif @movement.user == current_user # the logged in user is returned by calling #current_user helper method.
       erb :'movements/edit_movement' # render the edit_movement.erb view file, which is found within the movements/ subfolder in the views/ folder
     else # otherwise, the user is currently logged in, but the movement they are trying to edit does NOT belong to them, so they cannot edit it
       flash[:message] = "You are not authorized to edit an exercise movement created by a different user."
@@ -69,19 +72,44 @@ class MovementsController < ApplicationController
     end
   end
 
-  delete '/movements/:slug' do # route receives data when user clicks Delete Exercise button on exercise movement show page
-    if logged_in?
-      @movement = Movement.find_by_slugged_name(params[:slug])
-      if current_user.movements.include?(@movement)
-        @movement.delete
-        flash[:message] = "Your exercise was successfully deleted."
-        redirect to '/movements'
-      else
-        flash[:message] = "You are not authorized to delete an exercise created by a different user."
-        redirect to '/movements'
-      end
+  patch '/movements/:slug' do
+    @movement = Movement.find_by_slugged_name(params[:slug])
+
+    if params[:movement].values.any? {|value| value.empty?}
+      flash[:message] = "You must fill in Name, Instructions, Target Area, Reps, Modification and Challenge form fields to successfully edit your exercise movement."
+      redirect to "/movements/#{@movement.id}/edit"
     else
+      if params[:routine].values.all? {|value| value.empty?}
+        @movement.routine_ids = params[:movement][:routine_ids]
+        @movement.update(params[:movement])
+        flash[:message] = "Your exercise movement was successfully updated!"
+        redirect to "/movements/#{@movement.generate_slug}"
+      elsif params[:routine].values.all? {|value| value != ""}
+        @routine = current_user.routines.create(params[:routine]) # create and save to DB a routine instance with its attributes set via mass assignment and automatically belonging to the user instance who's currently logged in (and who the routine instance belongs to)
+        @movement.routine_ids = params[:movement][:routine_ids] # tell the movement instance which existing workout routines it's found in
+        @movement.routines << @routine # add the new routine just created to the movement instance's collection of routine instances in which it is used
+        @movement.update(params[:movement]) # update the attribute values of the movement instance (some attributes may have been edited)
+        @routine.movements << @movement # add the updated movement instance to the routine instance's array of movement instances performed in routine
+        flash[:message] = "Your exercise movement was successfully updated and is now included in a new workout routine!"
+        redirect to "/movements/#{@movement.generate_slug}"
+      else
+        flash[:message] = "You must fill in Name, Training Type, Duration, Difficulty Level and Equipment form fields to successfully create a new workout routine in which to perform your exercise movement."
+        redirect to "/movements/#{@movement.id}/edit"
+      end
+    end
+  end
+
+  delete '/movements/:slug' do # route receives data when user clicks Delete Exercise button on the show page of a single exercise movement
+    @movement = Movement.find_by_slugged_name(params[:slug]) # find movement instance by its @id attribute value, which = params[:id], i.e., whatever user entered in URL to relace :id route variable
+    if !logged_in?
       redirect to '/login'
+    elsif @movement.user == current_user
+      @movement.delete
+      flash[:message] = "Your exercise movement was successfully deleted."
+      redirect to '/movements'
+    else # the user is logged in, but they cannot delete the exercise movement because it does NOT belong to that user
+      flash[:message] = "You are not authorized to delete an exercise movement created by a different user."
+      redirect to '/movements'
     end
   end
 
