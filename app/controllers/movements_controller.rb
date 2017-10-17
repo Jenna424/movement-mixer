@@ -67,7 +67,7 @@ class MovementsController < ApplicationController
     elsif @movement.user == current_user # the logged in user is returned by calling #current_user helper method.
       erb :'movements/edit_movement' # if it's true that the @movement instance belongs to (was created by) the logged-in user, render the edit_movement.erb view file, which is found within the movements/ subfolder in the views/ folder
     else # otherwise, the user is currently logged in, but the movement they are trying to edit does NOT belong to them, so they cannot edit it
-      flash[:message] = "You are not authorized to edit an exercise movement created by a different user."
+      flash[:message] = "You are not authorized to edit an exercise movement designed by a different user."
       redirect to '/movements' # redirect user to the index page displaying all exercise movements
     end
   end
