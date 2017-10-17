@@ -34,9 +34,16 @@ class RoutinesController < ApplicationController
         # Now we can also call @routine.movements and the array of existing movement instances belonging to the @routine instance is returned
         flash[:message] = "You successfully created a new workout routine!"
         redirect to "/routines/#{@routine.generate_slug}" # show the user the workout routine they just created (without having created a new exercise movement for it)
+      elsif params[:movement].values.all? {|value| value != ""} # if all form fields to create a new movement for the new routine were filled in, the new movement is valid
+        @routine = current_user.routines.create(params[:routine])
+        @routine.movement_ids = params[:routine][:movement_ids] # the existing movement instances selected from checkboxes now belong to the routine instance
+        @new_movement = @routine.movements.create(params[:movement]) # create and save to DB a movement instance with its attributes set via mass assignment and immediately add it to routine instance's array of movement instances
+        @new_movement.user = @routine.user
+        
+        flash[:message] = "You successfully created a new workout routine!"
+        redirect to "/routines/#{@routine.generate_slug}" # show user the routine they just created (having also created a new exercise movement for it)
       end
     end
-  end
 
   get '/routines/:slug' do # route is GET request to localhost:9393/routines/slugged-version-of-@name-attribute-value-of-routine-instance-goes-here
     if logged_in? # the user can only view a routine if logged in
