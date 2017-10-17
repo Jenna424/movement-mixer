@@ -26,6 +26,15 @@ class RoutinesController < ApplicationController
     if params[:routine].values.any? {|value| value.empty?} # if user left any fields pertaining to routine attributes blank (value is empty string)
       flash[:message] = "You must fill in Name, Training Type, Duration, Difficulty Level and Equipment fields to create a new workout routine."
       redirect to '/routines/new' # redirect to localhost:9393/routines/new, where user sees form to try creating new routine again
+    else # otherwise, the user filled in all required workout routine fields
+      if params[:movement].values.all? {|value| value.empty?} # user did not create a new movement for the routine (all form fields for creating a new movement were left blank, i.e., values are empty strings)
+        @routine = current_user.routines.create(params[:routine])
+        # create @routine instance with its attributes set via mass assignment and immediately belonging to the user instance who's currently logged in
+        @routine.movement_ids = params[:routine][:movement_ids] # params[:routine][:movement_ids] is the array of @id values of existing movement instances that belong to the routine instance (from the movement checkboxes the user selected in form to create routine)
+        # Now we can also call @routine.movements and the array of existing movement instances belonging to the @routine instance is returned
+        flash[:message] = "You successfully created a new workout routine!"
+        redirect to "/routines/#{@routine.generate_slug}" # show the user the workout routine they just created (without having created a new exercise movement for it
+      end
     end
   end
 
