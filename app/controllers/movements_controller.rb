@@ -44,6 +44,9 @@ class MovementsController < ApplicationController
         @movement.update(params[:movement]) # update the attribute values of the movement instance (some attributes may have been edited)
         flash[:message] = "Your exercise movement was successfully updated and is now included in a new workout routine!"
         redirect to "/movements/#{@movement.generate_slug}"
+      else
+        flash[:message] = "You must fill in Name, Training Type, Duration, Difficulty Level and Equipment form fields to successfully create a new workout routine in which to perform your exercise movement."
+        redirect to "/movements/#{@movement.id}/edit"
       end
     end
   end
