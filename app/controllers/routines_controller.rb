@@ -38,11 +38,11 @@ class RoutinesController < ApplicationController
         @routine = current_user.routines.create(params[:routine])
         @routine.movement_ids = params[:routine][:movement_ids] # the existing movement instances selected from checkboxes now belong to the routine instance
         new_movement = @routine.movements.create(params[:movement]) # create and save to DB a movement instance with its attributes set via mass assignment and immediately add it to routine instance's array of movement instances
-        new_movement.user = @routine.user
+        new_movement.user= @routine.user
         new_movement.save
         flash[:message] = "You successfully created a new workout routine!"
         redirect to "/routines/#{@routine.generate_slug}" # show user the routine they just created (having also created a new exercise movement for it)
-      else
+      else # if the user filled in only SOME of the required fields to create a new movement for their routine, the movement is invalid so,
         flash[:message] = "You must fill in Name, Instructions, Target Area, Reps, Modification and Challenge fields to create a new exercise movement to add to your workout routine."
         redirect to "/routines/new" # present the form to try creating a new routine again
       end
