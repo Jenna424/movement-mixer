@@ -19,4 +19,10 @@
   <label for="challenge">Challenge:</label>
   <input type="text" name="movement[challenge]" id="challenge"><br></br>
 
+  <label><strong>Choose which of your workout routines will include your new exercise:</strong></label><br></br>
+
+  <% current_user.routines.each do |routine| %>
+    <input type="checkbox" name="movement[routine_ids][]" value="<%= routine.id %>" id="<%= routine.name %>"><%= routine.name %></input>
+  <% end %>
+
 </form>
