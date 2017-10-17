@@ -1,1 +1,5 @@
 <h1>Here are your customized workout routines, <%= @user.name %>. You're quite the fitness fanatic!</h1>
+
+<% @user.routines.each do |routine| %>
+  <li><a href="/routines/<%= routine.generate_slug %>"><%= routine.name %></a></li>
+<% end %>
