@@ -74,7 +74,7 @@ class RoutinesController < ApplicationController
   end
 
   patch '/routines/:slug' do # PATCH request route receives data submitted in form to edit the user's routine
-  
+    @routine = Routine.find_by_slugged_name(params[:slug])
   end
 
   delete '/routines/:id/delete' do # route receives data when Delete Routine button (form) is clicked on the show page of routine wished to be deleted
