@@ -92,6 +92,9 @@ class MovementsController < ApplicationController
         @routine.movements << @movement # add the updated movement instance to the routine instance's array of movement instances performed in routine
         flash[:message] = "Your exercise movement was successfully updated and is now included in a brand new workout routine!"
         redirect to "/movements/#{@movement.generate_slug}" # show the exercise movement that was just edited
+      else # the user left some required form fields for routine attributes blank, so routine is not valid
+        flash[:message] = "You must fill in Name, Training Type, Duration, Difficulty Level and Equipment fields to create a new workout routine in which to perform your new exercise movement."
+        redirect to "/movements/#{@movement.id}/edit" # user sees form to try editing exercise movement again
       end
     end
   end
