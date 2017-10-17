@@ -40,7 +40,7 @@ class MovementsController < ApplicationController
         @routine = current_user.routines.create(params[:routine]) # create and save to DB a routine instance with its attributes set via mass assignment and automatically belonging to the user instance who's currently logged in (and who created the routine)
         @movement = @routine.movements.create(params[:movement]) # create and save to DB a movement instance with its attributes set via mass assigment and immediately included in the routine instance that we just created, which belongs to the currently logged-in user. Now we can call routine.movements and movement.routines
         @movement.routine_ids = params[:movement][:routine_ids] # tell the movement instance which existing workout routines it's found in
-        @movement.user = current_user # tell the movement that it belongs to the current user (sets the foreign key)
+        @movement.user = current_user # tell the movement that it belongs to the current user (this sets the foreign key)
         @movement.update(params[:movement]) # update the attribute values of the movement instance (some attributes may have been edited)
         flash[:message] = "Your exercise movement was successfully updated and is now included in a new workout routine!"
         redirect to "/movements/#{@movement.generate_slug}"
