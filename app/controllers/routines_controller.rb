@@ -42,8 +42,12 @@ class RoutinesController < ApplicationController
         new_movement.save
         flash[:message] = "You successfully created a new workout routine!"
         redirect to "/routines/#{@routine.generate_slug}" # show user the routine they just created (having also created a new exercise movement for it)
+      else
+        flash[:message] = "You must fill in Name, Instructions, Target Area, Reps, Modification and Challenge fields to create a new exercise movement to add to your workout routine."
+        redirect to "/routines/new" # present the form to try creating a new routine again
       end
     end
+  end
 
   get '/routines/:slug' do # route is GET request to localhost:9393/routines/slugged-version-of-@name-attribute-value-of-routine-instance-goes-here
     if logged_in? # the user can only view a routine if logged in
