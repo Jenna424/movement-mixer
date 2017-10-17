@@ -35,11 +35,13 @@ class RoutinesController < ApplicationController
         flash[:message] = "You successfully created a new workout routine!"
         redirect to "/routines/#{@routine.generate_slug}" # show the user the workout routine they just created (without having created a new exercise movement for it)
       elsif params[:movement].values.all? {|value| value != ""} # if all form fields to create a new movement for the new routine were filled in, the new movement is valid
-        @routine = current_user.routines.create(params[:routine])
+        @routine = current_user.routines.create(params[:routine]) # create @routine instance with its attributes set via mass assignment and immediately belonging to the user instance who's currently logged in (who created it)
         @routine.movement_ids = params[:routine][:movement_ids] # the existing movement instances selected from checkboxes now belong to the routine instance
-        new_movement = @routine.movements.create(params[:movement]) # create and save to DB a movement instance with its attributes set via mass assignment and immediately add it to routine instance's array of movement instances
-        new_movement.user= @routine.user
-        new_movement.save
+        new_movement = @routine.movements.create(params[:movement]) # create and save to DB a movement instance with its attributes set via mass assignment and immediately associated with the @routine instance
+        # now we can call new_movement.routines to return array of routine instances (including @routine) in which new_movement movement instance is performed
+        # we can also call @routine.movements to return array of movement instances (including new_movement) that are performed in that specific @routine
+        new_movement.user = @routine.user # tell the new_movement instance that it belongs to the user instance who created it (the same user who created @routine)
+        new_movement.save # call #save on new_movement instance to make sure its user_id foreign key column value is inserted into DB (since the movement instance belongs to the user who created it)
         flash[:message] = "You successfully created a new workout routine!"
         redirect to "/routines/#{@routine.generate_slug}" # show user the routine they just created (having also created a new exercise movement for it)
       else # if the user filled in only SOME of the required fields to create a new movement for their routine, the movement is invalid so,
