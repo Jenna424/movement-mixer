@@ -88,7 +88,7 @@ class RoutinesController < ApplicationController
       elsif params[:movement].values.all? {|value| value != ""} # if all form fields to create a new movement for the routine were filled in, the new movement is valid
         @routine.movement_ids = params[:routine][:movement_ids]
         @routine.update(params[:routine])
-        new_movement = @routine.movements.create(params[:movement]) # create and save to DB a movement instance with its attributes set via mass assignment and shovel it into the routine instance's array of movement instances
+        new_movement = @routine.movements.create(params[:movement])
         new_movement.user = current_user
         new_movement.save
         flash[:message] = "Your workout routine was successfully updated!"
