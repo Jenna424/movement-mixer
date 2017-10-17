@@ -12,4 +12,11 @@ class MovementsController < ApplicationController
     end
   end
 
+  get '/movements/new' do # route is GET request to localhost:9393/movements/new to present form to create new movement
+    if logged_in?
+      erb :'movements/create_movement' # render create_movement.erb view file, found within the movements/ subfolder in the views/ folder
+    else
+      redirect to '/login'
+    end
+  end
 end
