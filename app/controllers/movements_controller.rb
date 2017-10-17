@@ -99,4 +99,18 @@ class MovementsController < ApplicationController
     end
   end
 
+  delete '/movements/:slug' do # route receives data when user clicks Delete Exercise button on the show page of a single exercise movement
+    @movement = Movement.find_by_slugged_name(params[:slug]) # find movement instance by its slugged @name attribute value
+    if !logged_in? # if the user is not logged in, redirect to page with login form
+      redirect to '/login'
+    elsif @movement.user == current_user # if the movement instance requested for deletion belongs to the logged-in user
+      @movement.delete # delete the movement instance
+      flash[:message] = "Your exercise movement was successfully deleted."
+      redirect to '/movements' # redirect user to movements index page, where their deleted exercise movement is no longer listed
+    else # the user is logged in, but they cannot delete the exercise movement because it does NOT belong to that user
+      flash[:message] = "You are not authorized to delete an exercise movement designed by a different user."
+      redirect to '/movements'
+    end
+  end
+
 end
