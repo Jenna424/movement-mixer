@@ -72,4 +72,13 @@ class MovementsController < ApplicationController
     end
   end
 
+  patch '/movements/:slug' do # route receives data submitted in form to edit an exercise movement
+    @movement = Movement.find_by_slugged_name(params[:slug]) # find movement instance by its slugged @name attribute value
+    # params[:movement] is the movement hash nested inside params hash. Calling #values on this movement hash returns array of movement hash values.
+    if params[:movement].values.any? {|value| value.empty?} # If the user left any field blank for a movement attribute (value is empty string)
+      flash[:message] = "You must fill in Name, Instructions, Target Area, Reps, Modification and Challenge form fields to successfully edit your exercise movement."
+      redirect to "/movements/#{@movement.id}/edit" # user sees form to try editing exercise movement again
+    end
+  end
+
 end
