@@ -39,7 +39,7 @@ class RoutinesController < ApplicationController
         @routine.movement_ids = params[:routine][:movement_ids] # the existing movement instances selected from checkboxes now belong to the routine instance
         @new_movement = @routine.movements.create(params[:movement]) # create and save to DB a movement instance with its attributes set via mass assignment and immediately add it to routine instance's array of movement instances
         @new_movement.user = @routine.user
-        
+        @new_movement.save
         flash[:message] = "You successfully created a new workout routine!"
         redirect to "/routines/#{@routine.generate_slug}" # show user the routine they just created (having also created a new exercise movement for it)
       end
