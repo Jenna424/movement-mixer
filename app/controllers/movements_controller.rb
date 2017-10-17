@@ -84,6 +84,14 @@ class MovementsController < ApplicationController
         @movement.update(params[:movement]) # update attribute values of @movement instance (some might have been changed in edit form) and save changes to database
         flash[:message] = "Your exercise movement was successfully updated!"
         redirect to "/movements/#{@movement.generate_slug}" # show the movement that was just edited
+      elsif params[:routine].values.all? {|value| value != ""} # user created a new routine for the new movement to be used in (all fields for routine attributes are not empty strings)
+        @routine = current_user.routines.create(params[:routine]) # create and save to DB a routine instance with its attributes set via mass assignment and automatically belonging to the user instance who's currently logged in (and who the routine instance belongs to)
+        @movement.routine_ids = params[:movement][:routine_ids] # tell the movement instance which existing workout routines it's found in
+        @movement.routines << @routine # add the new routine just created to the movement instance's collection of routine instances in which it is used
+        @movement.update(params[:movement]) # update the attribute values of the movement instance (some attributes may have been edited) and save changes to database
+        @routine.movements << @movement # add the updated movement instance to the routine instance's array of movement instances performed in routine
+        flash[:message] = "Your exercise movement was successfully updated and is now included in a brand new workout routine!"
+        redirect to "/movements/#{@movement.generate_slug}" # show the exercise movement that was just edited
       end
     end
   end
