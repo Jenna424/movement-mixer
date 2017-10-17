@@ -33,7 +33,7 @@ class RoutinesController < ApplicationController
         @routine.movement_ids = params[:routine][:movement_ids] # params[:routine][:movement_ids] is the array of @id values of existing movement instances that belong to the routine instance (from the movement checkboxes the user selected in form to create routine)
         # Now we can also call @routine.movements and the array of existing movement instances belonging to the @routine instance is returned
         flash[:message] = "You successfully created a new workout routine!"
-        redirect to "/routines/#{@routine.generate_slug}" # show the user the workout routine they just created (without having created a new exercise movement for it
+        redirect to "/routines/#{@routine.generate_slug}" # show the user the workout routine they just created (without having created a new exercise movement for it)
       end
     end
   end
