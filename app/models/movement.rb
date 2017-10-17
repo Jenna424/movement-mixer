@@ -1,7 +1,8 @@
 class Movement < ActiveRecord::Base
   include Sluggable::InstanceMethods
   extend Sluggable::ClassMethods
-  
+
+  belongs_to :user # movement instance belongs to user instance who created it
   has_many :movement_routines
   has_many :routines, through: :movement_routines
 
