@@ -78,6 +78,13 @@ class MovementsController < ApplicationController
     if params[:movement].values.any? {|value| value.empty?} # If the user left any field blank for a movement attribute (value is empty string)
       flash[:message] = "You must fill in Name, Instructions, Target Area, Reps, Modification and Challenge fields to successfully edit your exercise movement."
       redirect to "/movements/#{@movement.id}/edit" # user sees form to try editing exercise movement again
+    else # user filled in all required fields for movement attributes
+      if params[:routine].values.all? {|value| value.empty?} # the user did not create a new routine for the new movement to be found in - all fields for routine attributes are blank (values are empty strings)
+        @movement.routine_ids = params[:movement][:routine_ids] # tell the movement instance which of the user's existing routines the movement will be performed in. Now we can call @movement.routines to return the array of routine instances in which the movement instance is used. Also, calling #movements on a routine instance that uses @movement will return array of movement instances, including @movement
+        @movement.update(params[:movement]) # update attribute values of @movement instance (some might have been changed in edit form) and save changes to database
+        flash[:message] = "Your exercise movement was successfully updated!"
+        redirect to "/movements/#{@movement.generate_slug}" # show the movement that was just edited
+      end
     end
   end
 
