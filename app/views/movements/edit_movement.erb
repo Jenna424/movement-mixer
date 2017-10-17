@@ -2,4 +2,21 @@
 
 <form action="/movements/<%= @movement.generate_slug %>" method="POST">
   <input type="hidden" id="hidden" name="_method" value="PATCH">
-</form>
+
+  <label for="name">Name:</label>
+  <input type="text" name="movement[name]" id="name" value="<%= @movement.name %>"><br></br>
+
+  <label for="instructions">Instructions:</label>
+  <input type="text" name="movement[instructions]" id="instructions" value="<%= @movement.instructions %>"><br></br>
+
+  <label for="target_area">Target Area:</label>
+  <input type="text" name="movement[target_area]" id="target_area" value="<%= @movement.target_area %>"><br></br>
+
+  <label for="reps">Reps:</label>
+  <input type="text" name="movement[reps]" id="reps" value="<%= @movement.reps %>"><br></br>
+
+  <label for="modification">Modification:</label>
+  <input type="text" name="movement[modification]" id="modification" value="<%= @movement.modification %>"><br></br>
+
+  <label for="challenge">Challenge:</label>
+  <input type="text" name="movement[challenge]" id="challenge" value="<%= @movement.challenge %>"><br></br>
