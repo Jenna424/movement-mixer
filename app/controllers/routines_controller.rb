@@ -23,8 +23,12 @@ class RoutinesController < ApplicationController
   end
   # routine hash looks like: {"name" => "@name value", "training_type" => "@training_type value", "duration" => "@duration value", "difficulty_level" => "@difficulty_level value", "equipment" => "@equipment value", "movement_ids" => [array of string @id values of existing movement instances belonging to routine instance]}
   post '/routines' do # route receives data submitted in form to create new routine
+    if params[:routine].values.any? {|value| value.empty?} # if user left any fields pertaining to routine attributes blank (value is empty string)
+      flash[:message] = "You must fill in Name, Training Type, Duration, Difficulty Level and Equipment fields to create a new workout routine."
+      redirect to '/routines/new' # redirect to localhost:9393/routines/new, where user sees form to try creating new routine again
+    end
   end
-  
+
   get '/routines/:slug' do # route is GET request to localhost:9393/routines/slugged-version-of-@name-attribute-value-of-routine-instance-goes-here
     if logged_in? # the user can only view a routine if logged in
       @routine = Routine.find_by_slugged_name(params[:slug])
