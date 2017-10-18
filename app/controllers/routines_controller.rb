@@ -45,7 +45,7 @@ class RoutinesController < ApplicationController
         flash[:message] = "You successfully created a new workout routine!"
         redirect to "/routines/#{@routine.generate_slug}" # show user the routine they just created (having also created a new exercise movement for it)
       else # if the user filled in only SOME of the required fields to create a new movement for their routine, the movement is invalid so,
-        flash[:message] = "You must fill in Name, Instructions, Target Area, Reps, Modification and Challenge fields to create a new exercise movement to add to your workout routine."
+        flash[:message] = "You must fill in Name, Instructions, Target Area, Reps, Sets, Modification and Challenge fields to create a new exercise movement to add to your workout routine."
         redirect to "/routines/new" # present the form to try creating a new routine again
       end
     end
