@@ -12,14 +12,14 @@ class UsersController < ApplicationController
   end
 
   post '/signup' do # route receives data submitted in form to create new user
-    user = User.new(params) # instantiate user instance with its attributes set via mass assignment
+    @user = User.new(params) # instantiate user instance with its attributes set via mass assignment
     # user instance is successfully saved to DB if ALL form fields for username, email and password are filled out
-    if user.save
-      session[:user_id] = user.id # log in the newly created user
+    if @user.save
+      session[:user_id] = @user.id # log in the newly created user
       redirect to '/routines' # newly created, logged-in user sees index page of routines designed by all users
     else # otherwise, if the user left name, email or password form field blank (value is empty string)
       flash[:message] = "You must fill in all three fields to successfully register."
-      redirect to '/signup' # redirect user to page that displays signup form to try registering again
+      redirect to '/signup' # redirect to page that displays signup form to try registering again
     end
   end
 
