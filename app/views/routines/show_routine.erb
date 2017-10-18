@@ -1,5 +1,5 @@
-<h1><em><%= @routine.name %></em></h1>
-<h3>Workout Routine Designed by <%= @routine.user.name %>:</h3>
+<h2><%= @routine.name %></h2>
+<h4><em>Workout Routine Designed by <%= @routine.user.name %>:</em></h4>
 
 <ol>
   <% @routine.movements.each do |movement| %>
