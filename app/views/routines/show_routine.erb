@@ -1,6 +1,11 @@
 <h2><%= @routine.name %></h2>
 <h4><em>Workout Routine Designed by <%= @routine.user.name %>:</em></h4>
 
+<p><strong>Training Type:</strong> <%= @routine.training_type %></p>
+<p><strong>Duration of Workout:</strong> <%= @routine.duration %></p>
+<p><strong>Difficulty Level:</strong> <%= @routine.difficulty_level %></p>
+<p><strong>Equipment Needed:</strong> <%= @routine.equipment %></p>
+
 <ol>
   <% @routine.movements.each do |movement| %>
     <li><a href="/movements/<%= movement.generate_slug %>"><%= movement.name %></a>: <%= movement.reps %> reps</li>
