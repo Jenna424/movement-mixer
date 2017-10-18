@@ -17,7 +17,8 @@ class UsersController < ApplicationController
     if @user.save
       session[:user_id] = @user.id # log in the newly created user
       redirect to '/routines' # newly created, logged-in user sees index page of routines designed by all users
-    else # otherwise, if the user left username, email or password form field blank (value is empty string)
+    else # otherwise, if the user left name, email or password form field blank (value is empty string)
+      flash[:message] = "You must fill in all three fields to successfully register."
       erb :'users/create_user' # render create_user.erb view file, which is found in the users/ subfolder in views/ folder to try registering again
     end
   end
