@@ -1,4 +1,4 @@
-<h1>Create a New Workout Routine!</h1>
+<h2>Create a New Workout Routine!</h2>
 
 <form action="/routines" method="POST">
   <label for="name">Name:</label>
@@ -16,7 +16,7 @@
   <label for="equipment">Equipment:</label>
   <input type="text" name="routine[equipment]" id="equipment"><br></br>
 
-  <label><strong>Select Exercises for Your Workout! Choose basic exercise movements from the list below:</strong></label><br></br>
+  <label><strong>Start mixing some moves! Choose basic exercise movements from the list below:</strong></label><br></br>
 
   <% Movement.all.each do |movement| %>
     <input type="checkbox" name="routine[movement_ids][]" value="<%= movement.id %>" id="<%= movement.name %>"><%= movement.name %></input>
@@ -29,7 +29,7 @@
   <label for="move_name">Name:</label>
   <input type="text" name="movement[name]" id="move_name"><br></br>
 
-  <label for="instructions">Instructions:</label><br></br>
+  <label for="instructions">Instructions:</label>
   <textarea type="text" name="movement[instructions]" id="instructions"></textarea><br></br>
 
   <label for="target_area">Target Area:</label>
