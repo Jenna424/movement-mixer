@@ -22,7 +22,7 @@ class MovementsController < ApplicationController
 
   post '/movements' do # route receives data submitted in form to create new exercise movement
     if params[:movement].values.any? {|value| value.empty?} # if the user forgot to fill in any required field for movement attribute
-      flash[:message] = "You must fill in Name, Instructions, Target Area, Reps, Modification and Challenge fields to create a new exercise movement."
+      flash[:message] = "You must fill in Name, Instructions, Target Area, Reps, Sets, Modification and Challenge fields to create a new exercise movement."
       redirect to "/movements/new"
     else # user filled in all required fields for movement attributes
       if params[:routine].values.all? {|value| value.empty?} # user did not create a new workout routine in which to use the new movement
@@ -41,7 +41,7 @@ class MovementsController < ApplicationController
         @movement = @routine.movements.create(params[:movement]) # create and save to DB a movement instance with its attributes set via mass assigment and immediately included in the routine instance that we just created, which belongs to the currently logged-in user. Now we can call routine.movements and movement.routines
         @movement.routine_ids = params[:movement][:routine_ids] # tell the movement instance which existing workout routines it's found in
         @movement.user = current_user # tell the movement that it belongs to the current user (this sets the foreign key)
-        @movement.update(params[:movement]) # update the attribute values of the movement instance (some attributes may have been edited)
+        @movement.save # save changes, user_id foreign key value is inserted into row representing @movement instance in movements table
         flash[:message] = "Your exercise movement was successfully updated and is now included in a new workout routine!"
         redirect to "/movements/#{@movement.generate_slug}"
       else
