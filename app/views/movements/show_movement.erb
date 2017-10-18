@@ -1,10 +1,13 @@
-<h1><%= @movement.name %></h1>
+<h2><%= @movement.name %></h2>
+<h4><em>~Exercise Movement Designed by <%= @movement.user.name %>~</em></h4>
+
 <p><strong>Instructions:</strong> <%= @movement.instructions %></p>
 <p><strong>Target Area:</strong> <%= @movement.target_area %></p>
 <p><strong>Reps:</strong> <%= @movement.reps %></p>
 <p><strong>Sets:</strong> <%= @movement.sets %></p>
 <p><strong>Modification:</strong> <%= @movement.modification %></p>
 <p><strong>Challenge:</strong> <%= @movement.challenge %></p>
+
 <p><a href="/movements/<%= @movement.id %>/edit">Edit Exercise</a></p>
 
 <form action="/movements/<%= @movement.generate_slug %>" method="POST">
