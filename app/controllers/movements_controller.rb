@@ -76,7 +76,7 @@ class MovementsController < ApplicationController
     @movement = Movement.find_by_slugged_name(params[:slug]) # find movement instance by its slugged @name attribute value
     # params[:movement] is the movement hash nested inside params hash. Calling #values on this movement hash returns array of movement hash values.
     if params[:movement].values.any? {|value| value.empty?} # If the user left any field blank for a movement attribute (value is empty string)
-      flash[:message] = "You must fill in Name, Instructions, Target Area, Reps, Sets, Modification and Challenge fields to successfully edit your exercise movement."
+      flash[:message] = "You must fill in Name, Instructions, Target Area, Number of Reps per Set, Number of Sets, Modification and Challenge fields to successfully edit your exercise movement."
       redirect to "/movements/#{@movement.id}/edit" # user sees form to try editing exercise movement again
     else # user filled in all required fields for movement attributes
       if params[:routine].values.all? {|value| value.empty?} # the user did not create a new routine for the new movement to be found in - all fields for routine attributes are blank (values are empty strings)
