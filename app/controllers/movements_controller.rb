@@ -22,7 +22,7 @@ class MovementsController < ApplicationController
 
   post '/movements' do # route receives data submitted in form to create new exercise movement
     if params[:movement].values.any? {|value| value.empty?} # if the user forgot to fill in any required field for movement attribute
-      flash[:message] = "You must fill in Name, Instructions, Target Area, Reps, Sets, Modification and Challenge fields to create a new exercise movement."
+      flash[:message] = "You must fill in Name, Instructions, Target Area, Number of Reps per Set, Number of Sets, Modification and Challenge fields to create a new exercise movement."
       redirect to "/movements/new"
     else # user filled in all required fields for movement attributes
       if params[:routine].values.all? {|value| value.empty?} # user did not create a new workout routine in which to use the new movement
