@@ -46,7 +46,7 @@ class MovementsController < ApplicationController
         flash[:message] = "Your exercise movement was successfully updated and is now included in a brand new workout routine!"
         redirect to "/movements/#{@movement.generate_slug}"
       else
-        flash[:message] = "You must fill in Name, Training Type, Duration, Difficulty Level and Equipment form fields to create a new workout routine in which to perform your new exercise."
+        flash[:message] = "You must fill in Name, Training Type, Duration, Difficulty Level and Equipment fields to create a new workout routine in which to perform your new exercise."
         redirect to "/movements/new"
       end
     end
