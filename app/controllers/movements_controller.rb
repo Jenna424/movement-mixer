@@ -47,7 +47,7 @@ class MovementsController < ApplicationController
         redirect to "/movements/#{@movement.generate_slug}"
       else
         flash[:message] = "You must fill in Name, Training Type, Duration, Difficulty Level and Equipment form fields to successfully create a new workout routine in which to perform your new exercise."
-        redirect to "/movements/#{@movement.id}/edit"
+        redirect to "/movements/new"
       end
     end
   end
