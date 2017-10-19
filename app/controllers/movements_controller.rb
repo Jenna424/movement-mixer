@@ -42,7 +42,7 @@ class MovementsController < ApplicationController
         @movement.routine_ids = params[:movement][:routine_ids] # tell the movement instance which existing workout routines it's found in
         @movement.user = current_user # tell the movement that it belongs to the current user (this sets the foreign key)
         @movement.save # save changes, user_id foreign key value is inserted into row representing @movement instance in movements table
-        flash[:message] = "Your exercise movement was successfully updated and is now included in a new workout routine!"
+        flash[:message] = "Your exercise movement was successfully updated and is now included in a brand new workout routine!"
         redirect to "/movements/#{@movement.generate_slug}"
       else
         flash[:message] = "You must fill in Name, Training Type, Duration, Difficulty Level and Equipment form fields to successfully create a new workout routine in which to perform your exercise movement."
