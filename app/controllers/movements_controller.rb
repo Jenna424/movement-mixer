@@ -8,6 +8,7 @@ class MovementsController < ApplicationController
       @all_movements = Movement.all # @all_movements is an array storing all movement instances
       erb :'movements/movements_index' # render the movements_index.erb view file, which is found in the movements/ subfolder within the views/ folder
     else
+      flash[:message] = "You must log in to view the index of all exercise movements."
       redirect to '/login'
     end
   end
