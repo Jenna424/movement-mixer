@@ -15,7 +15,7 @@
   <label for="reps">Reps:</label>
   <input type="text" name="movement[reps]" id="reps" value="<%= @movement.reps %>"><br></br>
 
-  <label for="sets">Sets:</label>
+  <label for="sets">Number of Sets:</label>
   <input type="text" name="movement[sets]" id="sets" value="<%= @movement.sets %>"><br></br>
 
   <label for="modification">Modification:</label>
@@ -24,7 +24,7 @@
   <label for="challenge">Challenge:</label>
   <input type="text" name="movement[challenge]" id="challenge" value="<%= @movement.challenge %>"><br></br>
 
-  <label>Choose which of your workout routine(s) will incorporate this new exercise movement:</label><br></br>
+  <label>Choose which of your workout routine(s) will include this new exercise movement:</label><br></br>
 
   <% current_user.routines.each do |routine| %>
     <input type="checkbox" name="movement[routine_ids][]" value="<%= routine.id %>" id="<%= routine.name %>" <%= 'checked' if routine.movements.include?(@movement) %>><%= routine.name %></input>
