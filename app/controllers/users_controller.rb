@@ -54,7 +54,7 @@ class UsersController < ApplicationController
 
   get '/users/:slug' do # show action - route is GET request to localhost:9393/users/slugged-version-of-@name-attribute-value-of-user-instance-goes-here
     @user = User.find_by_slugged_name(params[:slug])
-    erb :'users/show' # render the show.erb view file, found within the users/ subfolder in the views/ folder
+    erb :'users/show_user' # render the show_user.erb view file, found within the users/ subfolder in the views/ folder
   end
 
 end
