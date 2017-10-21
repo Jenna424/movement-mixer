@@ -32,10 +32,10 @@ class UsersController < ApplicationController
   end
 
   post '/login' do # route receives data submitted in login form
-    @user = User.find_by(name: params[:name]) # find user instance by its @username attribute value (whatever was entered in username field in login form)
+    user = User.find_by(name: params[:name]) # find user instance by its @name attribute value (whatever was entered in name field in login form)
 
-    if @user && @user.authenticate(params[:password]) # if a user instance exists with that @username value and if the user authenticates with that password,
-      session[:user_id] = @user.id # log in the user
+    if user && user.authenticate(params[:password]) # if a user instance exists with that @name value and if the user authenticates with that password,
+      session[:user_id] = user.id # log in the user
       redirect to "/routines" # redirect user to localhost:9393/routines, the index page where all routines are listed
     else # if a valid user is NOT found,
       flash[:message] = "You entered an invalid name and password combination. Please try logging in again."
