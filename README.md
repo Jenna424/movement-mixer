@@ -19,3 +19,11 @@ Installation
 5). Seed your database by running rake db:seed.
 6). Run shotgun to start up your application's local server.
 7). Navigate to http://localhost:9393 to create your new account and start mixing some moves!
+
+Contributing
+
+Bug reports and pull requests are welcome on GitHub at https://github.com/Jenna424/movement-mixer. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the Contributor Covenant code of conduct.
+
+License
+
+The application is available as open source under the terms of the MIT License.
