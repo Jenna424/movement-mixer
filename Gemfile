@@ -11,9 +11,6 @@ gem 'shotgun'
 gem 'thin'
 gem 'bcrypt'
 gem 'rack-flash3'
-
-group :development do
-  gem 'pry'
-  gem 'tux'
-  gem 'sqlite3'
-end
+gem 'pry'
+gem 'tux'
+gem 'sqlite3'
