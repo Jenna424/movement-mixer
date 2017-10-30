@@ -39,7 +39,7 @@ class UsersController < ApplicationController
       redirect to "/routines" # redirect user to localhost:9393/routines, the index page where all routines are listed
     else # if a valid user is NOT found,
       flash[:message] = "You entered an invalid name and password combination. Please try logging in again."
-      erb :'users/login' # redirect to localhost:9393/login so user can try logging in again
+      redirect to '/login' # redirect to localhost:9393/login so user can try logging in again
     end
   end
 
